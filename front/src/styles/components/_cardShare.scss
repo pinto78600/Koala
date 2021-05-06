@@ -1,0 +1,110 @@
+.card-share-container{
+    display: grid;
+    grid-template-columns: 66px 1fr;
+    border: 2px solid #ffd0c4;
+    margin: 10px;
+    padding: 16px;
+    border-radius: 20px;
+    margin: 8px auto;
+    position: relative;
+    min-height: 100px;
+
+    .card-share-left{
+        img{
+          height: 52px;
+          width: 52px;
+          border-radius: 20px;
+          box-shadow: 1px 1px 3px rgba(51, 51, 51, 0.192);
+          object-fit: cover;
+        }
+    }
+
+
+    
+    .card-share-right{
+        
+        .share-right{
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0 4px;
+            min-height: 35px;
+            
+            .pseudo{
+                display: flex;
+            }
+
+            span{
+                font-style: italic;
+                font-family: "font-1", sans-serif;
+            }
+            
+        }
+        textarea{
+            height: 62px;
+            width: 100%;
+            font-size: 1.4rem;
+            padding: 12px 15px;
+            border-radius: 20px 20px 6px 20px;
+            border: solid 1px;
+        }
+        .card-shared-container{
+            display: grid;
+            grid-template-columns: 66px 1fr;
+            border: 1px solid grey;
+            margin: 10px;
+            padding: 16px;
+            border-radius: 20px;
+            margin: 8px auto;
+            position: relative;
+            min-height: 100px;
+            
+            
+            .card-left-shared{    
+                img{
+                    height: 42px;
+                    width: 42px;
+                    border-radius: 20px;
+                    box-shadow: 1px 1px 3px rgba(51, 51, 51, 0.192);
+                    object-fit: cover;
+                }
+            
+                
+            }
+            .card-right-shared{
+        
+                .shared-right{
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 2px 0 4px;
+                    min-height: 35px;
+        
+                    .pseudo-shared{
+                        display: flex;
+                    }
+        
+                    span{
+                        font-style: italic;
+                        font-family: "font-1", sans-serif;
+                    }
+                    p{
+                        margin: 3 0 9px;
+                        font-size: 1.1rem;
+                    }
+                }
+                img{
+                    width: 100%;
+                    border-radius: 6px;
+                    margin-top: 12px;
+                    box-shadow: 0 0 3px rgba(51, 51, 51, 0.342);
+                }
+        
+            }
+        }
+
+      }
+
+}
+.footer-btn-modal{
+    display: flex;
+    justify-content: space-evenly;
+}

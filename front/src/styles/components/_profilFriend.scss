@@ -1,0 +1,121 @@
+.profile-container{
+    .spinner-profil-friend{
+        text-align: center;
+    }
+    
+    .container-search-bar{
+        background: $color-4;
+        padding: 150px;
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    
+        input{
+            font-size: 18px;
+            height: 50px;
+            border: solid 2px black;
+        }
+    
+        img{
+            width: 50px;
+        }
+        li{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            background: white;
+            width: 250px;
+            border: solid 1px black;
+            border-radius: 5px;
+            
+        }
+        
+        
+    }
+    .header-profil-friend{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .container-post-chat{
+        display: flex ;
+        justify-content: space-around;
+
+        .chat-user{
+            width: 40%;
+        }
+        .post-user{
+            width: 50%;
+        }
+
+    }
+    
+    .chat-room-container {
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        margin: 16px;
+        
+        .messages-container {
+            max-height: 370px;
+            flex: 1;
+            border: 1px solid black;
+            border-radius: 7px 7px 0 0;
+            overflow-y: auto;
+        
+        }
+        
+        .messages-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .messages-list p{
+            font-style: italic;
+            font-family: inherit;
+            font-size: 11px;
+        }
+        
+        .new-message-input-field {
+            height: 100px;
+            max-height: 50%;
+            font-size: 20px;
+            padding: 8px 12px;
+            resize: none;
+        }
+        
+        .message-item {
+            width: 55%;
+            margin: 8px;
+            padding: 12px 8px;
+            word-break: break-word;
+            border-radius: 4px;
+            color:black;
+        }
+        
+        .my-message {
+            background-color: #ff7b77;
+            margin-left: auto;
+        }
+        
+        .received-message {
+            background-color: #ffd0c4;
+            margin-right: auto;
+        }
+        
+        .messages-container, .new-message-input-field, .send-message-button {
+            border-color: #9a9a9a;
+            background: #fdeeee;
+        }
+
+        .footer-btn{
+            display: flex;
+            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+}
+    
+
