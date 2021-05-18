@@ -61,6 +61,7 @@ const UploadImg = () => {
                     accept='.jpg, .jpeg, .png'
                 />
                 <br/>
+                <h4 className='name_file_upload' >{selectedFile ? selectedFile.name : ' Aucun fichier choisi'}</h4>
                 {loadPost ? (
                 <div className='icon' >
                     <i className='fas fa-spinner fa-pulse'></i>

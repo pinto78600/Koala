@@ -146,6 +146,12 @@
         margin-bottom: 12px;
       }
 
+      .name_file_upload{
+        @media screen and(min-width: 1120px) {
+          display: none;
+        }
+      }
+
       img {
         height: 180px;
         width: 180px;
