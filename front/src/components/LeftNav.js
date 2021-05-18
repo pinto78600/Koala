@@ -46,19 +46,19 @@ const LeftNav = () => {
            <div className='icons' >
                 <div className='icons-bis' >
                     <NavLink to='/' exact activeClassName="active-left-nav" >
-                        <FaHome size='3em'/>
+                        <FaHome size='2em'/>
                     </NavLink>
                     <br/>
                     <NavLink to='/trending' exact activeClassName="active-left-nav" >
-                        <IoRocketSharp size='3em'/>
+                        <IoRocketSharp size='2em'/>
                     </NavLink >
                     <br/>
                     <NavLink to='/profil' exact activeClassName="active-left-nav" >
-                        <FaUser size='3em'/>
+                        <FaUser size='2em'/>
                     </NavLink>
                     <br />
                     <NavLink to='/friendly' exact activeClassName="active-left-nav" >
-                        <GiThreeFriends size='3em'/>
+                        <GiThreeFriends size='2em'/>
                     </NavLink>
                     <NotifsChat data={notifsData}/>
                 </div>

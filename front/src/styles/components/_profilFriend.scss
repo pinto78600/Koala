@@ -36,19 +36,34 @@
     .header-profil-friend{
         display: flex;
         justify-content: space-evenly;
+        @media screen and(max-width: 840px){
+            flex-direction: column;
+            align-items: center;
+        }
     }
-
+    
     .container-post-chat{
         display: flex ;
         justify-content: space-around;
-
-        .chat-user{
-            width: 40%;
-        }
         .post-user{
             width: 50%;
         }
-
+        .chat-user{
+            width: 0%;
+        }
+        @media screen and(max-width: 840px) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;   
+            .chat-user{
+                width: 90%;
+            }
+            .post-user{
+                width: 80%;
+            }
+        }
+        
+        
     }
     
     .chat-room-container {
@@ -57,6 +72,7 @@
         display: flex;
         flex-direction: column;
         margin: 16px;
+        
         
         .messages-container {
             max-height: 370px;

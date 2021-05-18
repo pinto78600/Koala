@@ -85,6 +85,10 @@
                     span{
                         font-style: italic;
                         font-family: "font-1", sans-serif;
+                          
+                        @media screen and(max-width: 1051px) {
+                            display: none;
+                        }
                     }
                     p{
                         margin: 3 0 9px;

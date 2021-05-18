@@ -17,6 +17,9 @@ const PostSchema = new mongoose.Schema(
         video: {
             type: String,
         },
+        link: {
+            type: String,
+        },
         likers: {
             type: [String],
             required: true
@@ -39,6 +42,7 @@ const PostSchema = new mongoose.Schema(
                     sharedMessage: String,
                     sharedPicture:String,
                     sharedVideo:String,
+                    sharedLink:String,
                     timestamp: String
                 }
             ]

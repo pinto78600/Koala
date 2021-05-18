@@ -1,51 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getPosts, addPost } from '../../actions/post.actions';
+import { getPosts, addPost, removeErrors } from '../../actions/post.actions';
 import { isEmpty, timestampParser } from '../Utils';
+import { FaHandPointer } from 'react-icons/fa';
 
 const NewPostForm = () => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage]= useState('');
-    const [postPicture, setPostPicture] = useState(null);
     const [video, setVideo] = useState('');
+    const [loadPost, setLoadPost] = useState(false);
     const [file, setFile] = useState();
+    const [ dataPicture, setDataPicture] = useState();
+    const [previewSource, setPreviewSource] = useState(null);
+    const [link, setLink] = useState('');
+
 
     const userData = useSelector(state => state.userReducer);
-    const error = useSelector(state => state.errorReducer.postErrors);
+    let error = useSelector(state => state.errorReducer.postErrors);
     
     const dispatch = useDispatch()
 
     const handlePicture = e => {
-        setPostPicture(URL.createObjectURL(e.target.files[0]));
+        const sendDataPicture = e.target.files[0];
+        previewFile(sendDataPicture);
         setFile(e.target.files[0]);
         setVideo('');
+        setDataPicture({ size : sendDataPicture.size, format : sendDataPicture.type});
     };
 
+        const previewFile = (file) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setPreviewSource(reader.result);
+            };
+        };
+
     const handlePost = async () => {
-        if(message || postPicture || video) {
-            const data = new FormData();
-            data.append('posterId', userData._id);
-            data.append('message', message);
-            if(file) data.append('file', file);
-            data.append('video', video);
-
-            await dispatch(addPost(data));
-            dispatch(getPosts());
+        if(message || previewSource || video) {;
+            setLoadPost(true);
+            let data = ''
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = async () => {
+                    data = { posterId : userData._id, message, video, link, picture : reader.result,  dataPicture}
+                    await dispatch(addPost(data));
+                };
+            }else {
+                 data = { posterId : userData._id, message, video, link }
+                 await dispatch(addPost(data));
+            }
+           
             cancelPost();
-
         }else {
             alert('Veuillez entrer un message')
         }
     };
-
-    
+        
     const cancelPost = () => {
         setMessage('');
-        setPostPicture('');
         setVideo('');
-        setFile('');
+        setFile('');                    
+        setPreviewSource('');
     };
     
     useEffect(() => {
@@ -57,16 +76,44 @@ const NewPostForm = () => {
                     findLink[i].includes("https://www.yout") || 
                     findLink[i].includes("https://yout") 
                 ) {
+                    setLink('');
                     let embed = findLink[i].replace("watch?v=", "embed/");
                     setVideo(embed.split("&")[0]);
                     findLink.splice(i, 1);
                     setMessage(findLink.join(" "));
-                    setPostPicture('');
+                    setPreviewSource('');
                 }
             }
         };
+
+        const handleLink = () => {
+            let findLink = message.split(" ");
+                    for(let i = 0; i < findLink.length; i++ ){
+                        if( findLink[i].includes("http://") || 
+                        findLink[i].includes("https://") ){
+                            const theLink = findLink[i];
+                            setLink(theLink.split(' ')[0])
+                            findLink.splice(i, 1);
+                        }
+                    }
+        
+        }
+        handleLink()
         handleVideo()
     }, [userData, message, video])
+
+    useEffect(() => {
+         if(error === 'No error') {
+            dispatch(getPosts());
+            setLoadPost(false);
+            dispatch(removeErrors());
+        } 
+
+       (!isEmpty(error.format) || !isEmpty(error.maxSize)) && setLoadPost(false);
+       
+        message === '' && setLink('');
+
+     },[loadPost, error, dispatch, message])
 
     return (
         <div className='post-container'>
@@ -93,7 +140,7 @@ const NewPostForm = () => {
                         <textarea 
                             name='message' id='message' placeholder='Quoi de neuf ?' 
                             onChange={e => setMessage(e.target.value)} value={message} /> 
-                        {message || postPicture || video.length > 20 ? (
+                        {message || previewSource || video.length > 20 ? (
                            <li className='card-container' >
                                <div className='card-left' >
                                     <img src={userData.picture} alt='userPic' />
@@ -107,7 +154,13 @@ const NewPostForm = () => {
                                     </div>
                                     <div className='content' >
                                         <p>{message}</p>
-                                        {postPicture && <img src={postPicture} alt="postPic" />} 
+                                        {link && (
+                                            <div className='link-post' >
+                                                <a href={link} target='_blank' rel="noreferrer">{link}</a>
+                                                <FaHandPointer size='1em' />
+                                            </div>
+                                        )}
+                                        {previewSource && <img src={previewSource} alt="postPic" />} 
                                         {video && (
                                              <iframe
                                              src={video}
@@ -139,13 +192,22 @@ const NewPostForm = () => {
                             {!isEmpty(error.format) && <p>{error.format}</p> }
                             {!isEmpty(error.maxSize) && <p>{error.maxSize}</p> }
                             <div className='btn-send' >
-                                {message || postPicture || video.length > 20 ? (
+                                {message || previewSource || video.length > 20 ? (
                                     <button className='cancel' onClick={cancelPost} >Annuler message</button>
 
                                 )
                                 : null
                                 }
-                                <button className='send' onClick={handlePost}>Envoyer</button>
+                                {loadPost ? (
+                                    <div className='icon' >
+                                        <i className='fas fa-spinner fa-pulse'></i>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <button className='send' onClick={handlePost}>Envoyer</button>                                    
+                                )
+                                }
                             </div>
                         </div>
                     </div>

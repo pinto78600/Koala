@@ -4,7 +4,8 @@ const userDB = process.env.DB_USER_PASS
 
 mongoose
     .connect(
-        `mongodb+srv://${userDB}@cluster0.fp0ul.mongodb.net/pintobook`,
+        `mongodb+srv://${userDB}@cluster0.fp0ul.mongodb.net/pintobook?retryWrites=true&w=majority`,
+        
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,

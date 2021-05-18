@@ -17,20 +17,23 @@ const corsOptions = {
     origin : process.env.CLIENT_URL,
     credentials : true,
     'allowedHeaders': ['sessionId', 'Content-Type'],
-    'exposedHeaders': ['sessionId'],
+    'exposedHeaders': ['sessionId', 'Set-Cookie'],
     'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    'preflightContinue': false
+    'preflightContinue': false,
 }
 
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.json({ limit : '50mb' }));
+app.use(express.urlencoded({ limit : '50mb', extended: true}));
 app.use(cookieParser());
+
 
 //jwt
 app.get('*', checkUser);
 app.get('/jwtid', requireAuth, (req, res) => {
-    res.status(200).send(res.locals.user.id)
+    if(res.locals.user.id){
+        res.status(200).send(res.locals.user.id)
+    }
 })
 
 //route
@@ -93,6 +96,6 @@ io.on("connection", (socket) => {
 
 
 // server 
-server.listen(port, () => {
+server.listen(port || 5000, () => {
         console.log(`Websocket listening on port ${port}`);
       });

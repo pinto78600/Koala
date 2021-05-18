@@ -13,10 +13,7 @@ const PostShare = ({id}) => {
           left                  : '50%',
           right                 : 'auto',
           bottom                : 'auto',
-          marginRight           : '-50%',
-          transform             : 'translate(-50%, -50%)',
-          width : '700px'
-        }
+          transform             : 'translate(-50%, -50%)',        }
       };
 
     const [modalIsOpen,setIsOpen] = useState(false);
@@ -38,6 +35,7 @@ const PostShare = ({id}) => {
         data.append('sharedPicture', userPost.picture);
         data.append('sharedVideo', userPost.video);
         data.append('date', userPost.createdAt);
+        data.append('sharedLink', userPost.link);
     
         await dispatch(addPost(data));
         dispatch(getPosts());
@@ -121,7 +119,9 @@ const PostShare = ({id}) => {
                                                 </div>
                                                 <span>{dateParser(userPost.createdAt)}</span>
                                             </div>
-                                            <p>{userPost.message}</p>
+                                            { userPost.message && (
+                                                <p>{userPost.message.substr(0,30)}... </p>
+                                            )}
                                             {userPost.picture !== "" && <img src={userPost.picture} alt='post-pic' className='card-shared-pic' />}
                                             {userPost.video !== "" && (
                                                  <iframe

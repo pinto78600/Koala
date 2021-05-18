@@ -21,33 +21,33 @@ const Navbar = () => {
                         </div>
                     </NavLink>
                 </div>
-                {uid ? (
-                    <ul>
-                        <li></li>
-                        <li className="welcome">
+                <div>
+                    {uid ? (
+                        <ul>
+                            <li></li>
+                            <li className="welcome">
+                                <NavLink exact to='/profil'>
+                                    <img src={userData.picture} alt='userPic' style={{ width : '40px' , borderRadius : '50%' , maxHeight : '40px'}} />
+                                </NavLink>
+                            </li>
+                            <Logout/>
+                        </ul>
+                    )
+                    :
+                    (
+                        <ul>
+                            <li></li>
+                            <li>
                             <NavLink exact to='/profil'>
-                                <h5>Bienvenue {userData.pseudo}</h5>
+                                <img src='./img/icons/login.svg' alt="login" data-tip='Connexion' data-for='connection' />
+                                <ReactTooltip place='left' effect='solid' type='info' id='connection' />
                             </NavLink>
-                        </li>
-                        <li>
-                            <img src={userData.picture} alt='userPic' style={{ width : '40px' , borderRadius : '50%' , maxHeight : '40px'}} />
-                        </li>
-                        <Logout/>
-                    </ul>
-                )
-                :
-                (
-                    <ul>
-                        <li></li>
-                        <li>
-                        <NavLink exact to='/profil'>
-                            <img src='./img/icons/login.svg' alt="login" data-tip='Connexion' data-for='connection' />
-                            <ReactTooltip place='left' effect='solid' type='info' id='connection' />
-                        </NavLink>
-                        </li>
-                    </ul>
-                )
-                }
+                            </li>
+                        </ul>
+                    )
+                    }
+
+                </div>
             </div>
         </nav>
     );

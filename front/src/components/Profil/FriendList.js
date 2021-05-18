@@ -15,11 +15,6 @@ const FriendList = () => {
     useEffect(() => {
         const notFriendsList = () => {
             let array = [];
-            // if(!isEmpty(userData.blocked)){
-            //     for(let i = 0; i < userData.blocked.length; i++){
-            //         usersData = usersData.filter(fil => fil._id !== userData.blocked[i])
-            //     }
-            // }
 
             usersData.map(user => {
                 if(user._id !== userData._id && 

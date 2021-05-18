@@ -6,17 +6,34 @@ import Thread from '../components/Thread';
 import Log from '../components/Log';
 import Trends from '../components/Trends';
 import FriendList from '../components/Profil/FriendList';
+import { useSelector } from 'react-redux';
+import { isEmpty } from '../components/Utils';
 
 const Home = () => {
 
+
     const uid = useContext(UidContext);
+
+    const posts = useSelector(state => state.allPostsReducer);
 
     return (
         <div className='home' >
             <LeftNav />
             <div className='main'>
                 <div className='home-header' >
-                    {uid ? <NewPostForm /> : <Log signin={true} signup={false} />}
+                    {
+                        isEmpty(posts) ? (
+                            <div className='icon' >
+                                <i className='fas fa-spinner fa-pulse'></i>
+                            </div>
+                        )
+                        :
+                        (
+                            uid ? <NewPostForm /> : <Log signin={true} signup={false} />
+
+                        )
+
+                    }
                     
                 </div>
                 <Thread/>

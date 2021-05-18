@@ -1,10 +1,9 @@
 const PostModel = require('../models/post.model');
 const UserModel = require('../models/user.model');
 const ObjectID = require('mongoose').Types.ObjectId;
-const fs = require("fs");
-const { promisify } = require("util");
-const pipeline = promisify(require("stream").pipeline);
 const { uploadErrors } = require("../utils/errors.utils");
+const { cloudinary } = require('../config/cloudinary');
+
 
 module.exports.readPost = (req, res) => {
     PostModel.find((err, docs) => {
@@ -34,70 +33,80 @@ module.exports.getPostUser = (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
-    let fileName;
-            
-    if(req.file !== null){
+    const { posterId, message, video, dataPicture, link } = req.body;
+    const picture = req.body.picture;
+    
+    if(dataPicture){
         try {
             if (
-                req.file.detectedMimeType != "image/jpg" &&
-                req.file.detectedMimeType != "image/png" &&
-                req.file.detectedMimeType != "image/jpeg"
-                )
-                throw Error("invalid file");
+                dataPicture.format != "image/jpg" &&
+                dataPicture.format != "image/png" &&
+                dataPicture.format != "image/jpeg"
+                ){
+                    throw Error("invalid file");
+                }
                 
-                if (req.file.size > 500000) throw Error("max size");
+                if (dataPicture.size > 1500000) throw Error("max size");
+                
+                const uploadResponse = await cloudinary.uploader.upload(picture, {
+                    upload_preset: 'posts-folder',
+                })
+                const newPost =  new PostModel({
+                    posterId,
+                    message,
+                    picture: req.body.picture != null ? uploadResponse.secure_url : "",
+                    video,
+                    link,
+                    likers: [],
+                    comments: []
+                })   
+                const post = await newPost.save();
+                return res.status(201).json(post);
+       
             } catch (err) {
                 const errors = uploadErrors(err);
                 return res.status(201).json({ errors });
             }
-            fileName = req.body.posterId + Date.now() + '.jpg';
-        
-        await pipeline(
-            req.file.stream,
-            fs.createWriteStream(
-                `${__dirname}/../../front/public/uploads/posts/${fileName}`
-            )
-        );
     }
-    const body = req.body;
-
-    const newPost = 
-        body.sharedId ? ( 
-            new PostModel({
-                posterId : body.posterId,
-                message: body.message,
-                picture: req.file != null ? "./uploads/posts/"+fileName : "",
-                video: body.video,
-                likers: [],
-                comments: [],
-                share:{
-                    sharedPicture: body.sharedPicture,
-                    sharedId : body.sharedId,
-                    sharedMessage : body.sharedMessage,
-                    sharedVideo: body.sharedVideo,
-                    timestamp : body.date
-                }
-            })
-        )
-        :
-        (
-            new PostModel({
-                posterId : body.posterId,
-                message: body.message,
-                picture: req.file != null ? "./uploads/posts/"+fileName : "",
-                video: body.video,
-                likers: [],
-                comments: []
-            })   
-        )
-        
-
     try{
+    
+        const newPost = 
+            req.body.sharedId ? ( 
+                new PostModel({
+                    posterId,
+                    message,
+                    likers: [],
+                    comments: [],
+                    share:{
+                        sharedPicture: req.body.sharedPicture,
+                        sharedId : req.body.sharedId,
+                        sharedMessage : req.body.sharedMessage,
+                        sharedVideo: req.body.sharedVideo,
+                        sharedLink: req.body.sharedLink,
+                        timestamp : req.body.date
+                    }
+                })
+            )
+            : 
+            (
+                new PostModel({
+                    posterId,
+                    message,
+                    picture: "",
+                    video,
+                    link,
+                    likers: [],
+                    comments: []
+                })    
+            )
         const post = await newPost.save();
         return res.status(201).json(post);
-    }catch(err){
-        return res.status(400).send(err);
+            
+    } catch (err) {
+    res.status(500).send(err);
     }
+                
+    
 };
 
 module.exports.updatePost = (req, res) => {
@@ -112,7 +121,7 @@ module.exports.updatePost = (req, res) => {
         {$set : udpateRecord},
         {new : true},
         (err, docs) => {
-            if(!err) res.send(docs);
+            if(!err) return res.send(docs);
             else console.log('Update error : ' + err);
         }
     )
@@ -126,7 +135,7 @@ module.exports.deletePost = (req, res) => {
     PostModel.findByIdAndRemove(
         req.params.id,
         (err, docs) => {
-            if(!err) res.send(docs)
+            if(!err) return res.send(docs)
             else console.log('Delete error : ' + err);
         }
     )

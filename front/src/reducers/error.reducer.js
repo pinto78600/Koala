@@ -11,12 +11,12 @@ export default function errorReducer(state = initialState, action){
                 userErrors : []
 
             }
-            case GET_USER_ERRORS:
-                return{
-                    postErrors: [],
-                    userErrors : action.payload
-    
-                }
+        case GET_USER_ERRORS:
+            return{
+                postErrors: [],
+                userErrors : action.payload
+
+            }
         default:
             return state
     }

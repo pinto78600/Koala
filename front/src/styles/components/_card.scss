@@ -46,8 +46,20 @@
   }
 
   .card-right {
+    
+    .link-post{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+
+      a:hover{
+        color: red;
+      }
+    }
     @media screen and(max-width: 590px) {
       margin-left: 18px;
+      
     }
     .card-header {
       display: flex;

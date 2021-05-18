@@ -76,7 +76,7 @@ export const getPost = (id) => {
     }
 }
 
-export const addPost = data => {
+export const addPost = (data) => {
     return (dispatch) => {
         return axios
             .post(`${process.env.REACT_APP_API_URL}api/post`, data)
@@ -84,7 +84,7 @@ export const addPost = data => {
                 if(res.data.errors) {
                     dispatch({ type : GET_POST_ERRORS , payload : res.data.errors })
                 }else{
-                    dispatch({ type : GET_POST_ERRORS , payload : '' })
+                    dispatch({ type : GET_POST_ERRORS , payload : 'No error' })
                 }
             })
     }
@@ -192,3 +192,9 @@ export const getTrends = sortedArray => {
         dispatch({ type: GET_TRENDS, payload : sortedArray })
     }
 };
+
+export const removeErrors = () => {
+    return (dispatch) => {
+        dispatch({ type: GET_POST_ERRORS, payload : '' })
+    }
+}

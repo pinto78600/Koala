@@ -122,8 +122,8 @@ const ProfilFriend = ( { uidFriend } ) => {
                 (
                     !loadData ? (
                         <div className='icon' >
-                        <i className='fas fa-spinner fa-pulse'></i>
-                    </div>
+                            <i className='fas fa-spinner fa-pulse'></i>
+                        </div>
                     )
                     :
                     (
@@ -139,6 +139,9 @@ const ProfilFriend = ( { uidFriend } ) => {
                             <img src={userDataFriend.picture} alt='picUserFriend'/>
                             <h1><FollowHandler idToFollow={userDataFriend._id} type={'suggestion'} /></h1> 
                             <button onClick={handleBlocked} >{nameButtonBlock}</button>
+                            {isEmpty(roomChat) &&  <form action='' onSubmit={handleCreate}>
+                                        <input type='submit' value='Envoyer message' />
+                                        </form>}
                         </div>
                         <div className='right-part' >
                             <div className='bio-update' >
@@ -151,25 +154,9 @@ const ProfilFriend = ( { uidFriend } ) => {
                         </div>
                     </div>
                     <div className='container-post-chat' >
-                        <div className='post-user'>
-                        <ul>
-                            {!isEmpty(postUser[0]) && 
-                                postUser.map(post => {
-                                    return  <Card post={post} key={post._id}/>
-                                })
-                            }
-                        </ul>
-                        </div>
                         <div className='chat-user' >
-                            {isEmpty(roomChat) ? (
-                                    <form action='' onSubmit={handleCreate}>
-                                    <input type='submit' value='Envoyer message' />
-                                    </form>
-                                )
-                                :
-                                (
-                                    
-                                    <ChatRoom 
+                            {!isEmpty(roomChat) && (
+                                  <ChatRoom 
                                         roomChat={roomChat} 
                                         count={count} 
                                         setCount={setCount}
@@ -178,6 +165,15 @@ const ProfilFriend = ( { uidFriend } ) => {
                                     />
                                 )
                             } 
+                        </div>
+                        <div className='post-user'>
+                            <ul>
+                                {!isEmpty(postUser[0]) && 
+                                    postUser.map(post => {
+                                        return  <Card post={post} key={post._id}/>
+                                    })
+                                }
+                            </ul>
                         </div>
                     </div>
                     </>
